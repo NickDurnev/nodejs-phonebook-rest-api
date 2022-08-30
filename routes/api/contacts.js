@@ -1,7 +1,6 @@
 const express = require("express");
 const methods = require("../../models/contacts");
-const schema = require("../../models/contactsSchema");
-
+const { schemaValidation } = require("../../middlewares/validation");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -17,11 +16,7 @@ router.get("/:contactId", async (req, res, next) => {
     : res.status(404).json({ message: "Not found" });
 });
 
-router.post("/", async (req, res, next) => {
-  const validation = schema.schema.validate(req.body);
-  if (validation.error) {
-    return res.status(400).json({ message: "missing required name field" });
-  }
+router.post("/", schemaValidation, async (req, res, next) => {
   const contact = await methods.addContact(req.body);
   res.status(201).json({ status: "success", data: contact });
 });
@@ -34,12 +29,8 @@ router.delete("/:contactId", async (req, res, next) => {
     : res.status(404).json({ message: "Not found" });
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", schemaValidation, async (req, res, next) => {
   const { contactId } = req.params;
-  const validation = schema.schema.validate(req.body);
-  if (validation.error) {
-    return res.status(400).json({ message: "missing fields" });
-  }
   const contact = await methods.updateContact(contactId, req.body);
   contact
     ? res.status(200).json({ data: contact })
