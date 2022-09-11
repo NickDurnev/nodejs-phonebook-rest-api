@@ -1,34 +1,30 @@
-const Contact = require("./schemas/contacts");
+const db = require("../db/contacts");
 const isValid = require("mongoose").Types.ObjectId.isValid;
 
-const getAllContacts = async () => await Contact.find({});
+const getAllContacts = async () => await db.get();
 
 const getContactByID = async (id) => {
   if (!isValid(id)) return false;
-  return await Contact.findById({ _id: id });
+  return await db.getByID(id);
 };
 
 const removeContact = async (id) => {
   if (!isValid(id)) return false;
-  return await Contact.findByIdAndRemove({ _id: id });
+  return await db.remove(id);
 };
 
 const createContact = async ({ name, email, phone }) =>
-  await Contact.create({ name, email, phone });
+  await db.create({ name, email, phone });
 
 const updateContact = async (id, fields) => {
   if (!isValid(id)) return false;
-  return await Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });
+  return await db.update(id, fields);
 };
 
 const updateStatusContact = async (id, body) => {
   if (!isValid(id)) return false;
   const { favorite } = body;
-  return await Contact.findByIdAndUpdate(
-    { _id: id },
-    { $set: { favorite: favorite } },
-    { new: true }
-  );
+  return await db.updateStatus(id, favorite);
 };
 
 module.exports = {

@@ -1,6 +1,8 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const createError = require("http-errors");
+const catchAsyncErrors = require("./middlewares/errorHandler");
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -14,12 +16,17 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 
-app.use((req, res) => {
-  res.status(404).json({ message: "Not found" });
-});
+app.use(
+  catchAsyncErrors((req, res, next) => {
+    next(createError(404));
+  })
+);
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    message: error.message,
+  });
 });
 
 module.exports = app;
