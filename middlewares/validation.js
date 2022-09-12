@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 module.exports = {
-  schemaValidation: (req, res, next) => {
+  validationMiddleware: (req, res, next) => {
     const schema = Joi.object({
       name: Joi.string().max(30).alphanum().required(),
 
