@@ -1,6 +1,6 @@
 const express = require("express");
 const ctrContacts = require("../../controllers/contacts");
-const { validationMiddleware } = require("../../middlewares/validation");
+const { validationMiddleware } = require("../../middlewares/contactValidation");
 const catchAsyncErrors = require("../../middlewares/errorHandler");
 const router = express.Router();
 
@@ -8,12 +8,19 @@ router.get("/", catchAsyncErrors(ctrContacts.get));
 
 router.get("/:contactId", catchAsyncErrors(ctrContacts.getById));
 
-router.post("/", validationMiddleware, ctrContacts.create);
+router.post("/", validationMiddleware, catchAsyncErrors(ctrContacts.create));
 
-router.delete("/:contactId", ctrContacts.remove);
+router.delete("/:contactId", catchAsyncErrors(ctrContacts.remove));
 
-router.put("/:contactId", validationMiddleware, ctrContacts.update);
+router.put(
+  "/:contactId",
+  validationMiddleware,
+  catchAsyncErrors(ctrContacts.update)
+);
 
-router.patch("/:contactId/favorite", ctrContacts.updateStatus);
+router.patch(
+  "/:contactId/favorite",
+  catchAsyncErrors(ctrContacts.updateStatus)
+);
 
 module.exports = router;
