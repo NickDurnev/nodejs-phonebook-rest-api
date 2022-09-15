@@ -2,13 +2,30 @@ const createError = require("http-errors");
 const service = require("../service/contacts");
 
 const get = async (req, res, next) => {
-  const results = await service.getAllContacts();
+  const { page = 1, limit = 20, favorite = null } = req.query;
+  let skip = 0;
+  page > 1 ? (skip = (page - 1) * limit) : (skip = 0);
+  const results = await service.getAllContacts(
+    parseInt(skip),
+    parseInt(limit),
+    favorite
+  );
+  if (results.length === 0) {
+    res.json({
+      status: "success",
+      code: 200,
+      data: "Contacts ended",
+    });
+    return;
+  }
   res.json({
     status: "success",
     code: 200,
     data: {
       contacts: results,
     },
+    page,
+    limit,
   });
 };
 
