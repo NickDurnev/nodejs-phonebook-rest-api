@@ -3,9 +3,11 @@ const logger = require("morgan");
 const cors = require("cors");
 const createError = require("http-errors");
 const catchAsyncErrors = require("./middlewares/errorHandler");
+const { authMiddleware } = require("./middlewares/tokenValidation");
 
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth");
+const avatarsRouter = require("./routes/api/avatars");
 
 const app = express();
 
@@ -14,9 +16,11 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", authRouter);
+app.use("/users", authMiddleware, avatarsRouter);
 
 app.use(
   catchAsyncErrors((req, res, next) => {

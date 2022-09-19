@@ -1,6 +1,7 @@
 const service = require("../service/users");
 const createError = require("http-errors");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 const { unauthorizedError } = require("../helpers/errors");
 
 const registration = async (req, res, next) => {
@@ -10,7 +11,8 @@ const registration = async (req, res, next) => {
     next(createError(404, "Email in use"));
     return;
   }
-  const newUser = await service.userSignup(password, email);
+  const avatar = gravatar.url(email, { s: "200" });
+  const newUser = await service.userSignup(password, email, avatar);
   res.status(201).json({
     user: { email: newUser.email, subscription: newUser.subscription },
   });
