@@ -32,19 +32,14 @@ const res = httpMocks.createResponse();
 describe("login", () => {
   beforeAll(async () => {
     const token = jwt.sign({ id: user.id, email: user.email }, secret);
-
     jest.spyOn(User, "findOne").mockImplementationOnce(async () => user);
-
     jest
       .spyOn(bcrypt, "compare")
       .mockImplementationOnce(async () => password === user.password);
-
     jest.spyOn(service, "addToken").mockImplementationOnce(async () => {
       return { token: token, ...user };
     });
-
     const mNext = jest.fn();
-
     await ctrUsers.login(req, res, mNext);
   });
   test("should return status 200 ", () => {
@@ -54,8 +49,9 @@ describe("login", () => {
     const { token } = res._getJSONData();
     expect(token).toBeDefined();
   });
-  test("should return token", () => {
+  test("should return object user with email and subscription fields, type of which String", () => {
     const { user } = res._getJSONData();
+    expect(user).toBeDefined();
     expect(typeof user.email).toBe("string");
     expect(typeof user.subscription).toBe("string");
   });
