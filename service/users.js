@@ -7,7 +7,8 @@ const secret = process.env.SECRET;
 
 const getUserByEmail = async (email) => await db.getByEmail(email);
 
-const userSignup = async (password, email) => await db.signup(password, email);
+const userSignup = async (password, email, avatar) =>
+  await db.signup(password, email, avatar);
 
 const userLogout = async (email, token) => await db.logout(email, token);
 
