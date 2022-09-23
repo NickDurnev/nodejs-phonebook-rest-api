@@ -8,6 +8,10 @@ const secret = process.env.SECRET;
 
 const authMiddleware = async (req, res, next) => {
   // eslint-disable-next-line no-unused-vars
+  if (!req.headers.authorization) {
+    next();
+    return;
+  }
   const [tokenType, token] = req.headers.authorization.split(" ");
   if (tokenType !== "Bearer") {
     next(createError(400, "Token type is wrong. Must be a Bearer"));
