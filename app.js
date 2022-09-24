@@ -7,7 +7,7 @@ const { authMiddleware } = require("./middlewares/tokenValidation");
 
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth");
-const avatarsRouter = require("./routes/api/avatars");
+const usersRouter = require("./routes/api/users");
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.use(express.static("public"));
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", authRouter);
-app.use("/users", authMiddleware, avatarsRouter);
+app.use("/users", authMiddleware, usersRouter);
 
 app.use(
   catchAsyncErrors((req, res, next) => {

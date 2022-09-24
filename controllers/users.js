@@ -14,7 +14,10 @@ const registration = async (req, res, next) => {
   const avatar = gravatar.url(email, { s: "200" });
   const newUser = await service.userSignup(password, email, avatar);
   res.status(201).json({
-    user: { email: newUser.email, subscription: newUser.subscription },
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
   });
 };
 
@@ -28,6 +31,10 @@ const login = async (req, res, next) => {
   const isSamePassword = await bcrypt.compare(password, user.password);
   if (!isSamePassword) {
     next(createError(401, "Email or password is wrong"));
+    return;
+  }
+  if (!user.verify) {
+    next(createError(401, "Verify your email"));
     return;
   }
   const payload = {
@@ -78,10 +85,84 @@ const updateSub = async (req, res, next) => {
   }
 };
 
+const verification = async (req, res, next) => {
+  const { verificationToken } = req.params;
+  const user = await service.getUserByVerificationToken(verificationToken);
+  if (!user) {
+    next();
+    return;
+  }
+  if (user) {
+    const result = await service.updateUserVerification(user._id);
+    if (result) {
+      res.status(200).json({ message: "Verification successful" });
+    }
+  }
+};
+
+const resendEmail = async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    next(createError(400, "Missing required field email"));
+    return;
+  }
+  const user = await service.getUserByEmail(email);
+  if (!user) {
+    next();
+    return;
+  }
+  if (user.verify) {
+    next(createError(400, "Verification has already been passed"));
+    return;
+  }
+  await service.sendVerifyEmail(email, user.verificationToken);
+  res.status(200).json({ message: "Verification email sent" });
+};
+
+const updateResetPasswordToken = async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    next(createError(400, "Missing required field email"));
+    return;
+  }
+  const { resetPasswordToken } = await service.addResetPasswordToken(email);
+  console.log(resetPasswordToken);
+  if (!resetPasswordToken) {
+    next();
+    return;
+  }
+  await service.sendResetPasswordEmail(email, resetPasswordToken);
+  res.status(200).json({ message: "Reset password email sent" });
+};
+
+const resetPassword = async (req, res, next) => {
+  const { resetPasswordToken } = req.params;
+  const { password } = req.body;
+  if (!password) {
+    next(createError(400, "Missing required field password"));
+    return;
+  }
+  const user = await service.getUserByResetPasswordToken(resetPasswordToken);
+  if (!user) {
+    next();
+    return;
+  }
+  if (user) {
+    const result = await service.resetUserPassword(user._id, password);
+    if (result) {
+      res.status(200).json({ message: "Password has been changed" });
+    }
+  }
+};
+
 module.exports = {
   registration,
   login,
   logout,
   currentUser,
   updateSub,
+  verification,
+  resendEmail,
+  updateResetPasswordToken,
+  resetPassword,
 };
