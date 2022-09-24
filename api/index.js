@@ -2,12 +2,12 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const createError = require("http-errors");
-const catchAsyncErrors = require("./middlewares/errorHandler");
-const { authMiddleware } = require("./middlewares/tokenValidation");
+const catchAsyncErrors = require("../middlewares/errorHandler");
+const { authMiddleware } = require("../middlewares/tokenValidation");
 
-const contactsRouter = require("./routes/api/contacts");
-const authRouter = require("./routes/api/auth");
-const usersRouter = require("./routes/api/users");
+const contactsRouter = require("../routes/api/contacts");
+const authRouter = require("../routes/api/auth");
+const usersRouter = require("../routes/api/users");
 
 const app = express();
 
