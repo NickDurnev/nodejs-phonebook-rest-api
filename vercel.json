@@ -2,7 +2,7 @@
    "version": 2,
    "name": "phonebook-api",
    "builds": [
-      { "src": "app.js", "use": "@vercel/node" }
+      { "src": "/api/index.js", "use": "@vercel/node" }
    ],
    "rewrites": [
       { "source": "/api/(.*)", "destination": "/api" }
