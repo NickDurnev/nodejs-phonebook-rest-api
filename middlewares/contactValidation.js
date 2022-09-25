@@ -5,7 +5,7 @@ module.exports = {
     const schema = Joi.object({
       name: Joi.string().max(30).alphanum().required(),
 
-      phone: Joi.string().max(12).required(),
+      phone: Joi.string().max(20).required(),
 
       email: Joi.string().email({
         minDomainSegments: 2,
