@@ -1,26 +1,25 @@
 const express = require("express");
-const ctrContacts = require("../../controllers/contacts");
-const { validationMiddleware } = require("../../middlewares/contactValidation");
-const catchAsyncErrors = require("../../middlewares/errorHandler");
+const { ctrContacts } = require("../../controllers");
+const { contactValidation } = require("../../middlewares");
+const { errorHandler } = require("../../middlewares");
 const router = express.Router();
 
-router.get("/", catchAsyncErrors(ctrContacts.get));
+const { validationMiddleware } = contactValidation;
 
-router.get("/:contactId", catchAsyncErrors(ctrContacts.getById));
+router.get("/", errorHandler(ctrContacts.get));
 
-router.post("/", validationMiddleware, catchAsyncErrors(ctrContacts.create));
+router.get("/:contactId", errorHandler(ctrContacts.getById));
 
-router.delete("/:contactId", catchAsyncErrors(ctrContacts.remove));
+router.post("/", validationMiddleware, errorHandler(ctrContacts.create));
+
+router.delete("/:contactId", errorHandler(ctrContacts.remove));
 
 router.put(
   "/:contactId",
   validationMiddleware,
-  catchAsyncErrors(ctrContacts.update)
+  errorHandler(ctrContacts.update)
 );
 
-router.patch(
-  "/:contactId/favorite",
-  catchAsyncErrors(ctrContacts.updateStatus)
-);
+router.patch("/:contactId/favorite", errorHandler(ctrContacts.updateStatus));
 
 module.exports = router;

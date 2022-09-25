@@ -5,9 +5,9 @@ const createError = require("http-errors");
 const catchAsyncErrors = require("./middlewares/errorHandler");
 const { authMiddleware } = require("./middlewares/tokenValidation");
 
-const contactsRouter = require("./routes/api/contacts");
-const authRouter = require("./routes/api/auth");
-const usersRouter = require("./routes/api/users");
+const { contactsRouter } = require("./routes/api");
+const { authRouter } = require("./routes/api");
+const { usersRouter } = require("./routes/api");
 
 const app = express();
 

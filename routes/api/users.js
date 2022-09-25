@@ -2,12 +2,16 @@ const express = require("express");
 const path = require("path");
 const router = express.Router();
 const multer = require("multer");
-const { setAvatar } = require("../../controllers/avatars");
+const { ctrAvatars } = require("../../controllers");
 const ctrUsers = require("../../controllers/users");
-const { validationMiddleware } = require("../../middlewares/userValidation");
-const catchAsyncErrors = require("../../middlewares/errorHandler");
+const { userValidation } = require("../../middlewares");
+const { errorHandler } = require("../../middlewares");
 
-const FILE_DIR = path.join("./tmp");
+const { validationMiddleware } = userValidation;
+
+const FILE_DIR = path.join(__dirname, "..", "..", "tmp");
+
+console.log(FILE_DIR);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -20,29 +24,26 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.patch("/avatars", upload.single("avatar"), catchAsyncErrors(setAvatar));
+router.patch("/avatars", upload.single("avatar"), errorHandler(ctrAvatars));
 
-router.get(
-  "/verify/:verificationToken",
-  catchAsyncErrors(ctrUsers.verification)
-);
+router.get("/verify/:verificationToken", errorHandler(ctrUsers.verification));
 
 router.post(
   "/verify/",
   validationMiddleware,
-  catchAsyncErrors(ctrUsers.resendEmail)
+  errorHandler(ctrUsers.resendEmail)
 );
 
 router.post(
   "/res_password/:resetPasswordToken",
   validationMiddleware,
-  catchAsyncErrors(ctrUsers.resetPassword)
+  errorHandler(ctrUsers.resetPassword)
 );
 
 router.post(
   "/res_password/",
   validationMiddleware,
-  catchAsyncErrors(ctrUsers.updateResetPasswordToken)
+  errorHandler(ctrUsers.updateResetPasswordToken)
 );
 
 module.exports = router;

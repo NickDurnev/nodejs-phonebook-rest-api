@@ -1,4 +1,5 @@
-const { setUserAvatar, setAvatarURL } = require("../service/avatars");
+const { avatarService } = require("../service");
+const { setUserAvatar, setAvatarURL } = avatarService;
 
 const setAvatar = async (req, res, next) => {
   const { email } = req.user;
@@ -14,4 +15,4 @@ const setAvatar = async (req, res, next) => {
   }
 };
 
-module.exports = { setAvatar };
+module.exports = setAvatar;

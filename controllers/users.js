@@ -1,18 +1,33 @@
-const service = require("../service/users");
+const { userService } = require("../service");
 const createError = require("http-errors");
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const { unauthorizedError } = require("../helpers/errors");
 
+const {
+  getUserByEmail,
+  getUserByVerificationToken,
+  getUserByResetPasswordToken,
+  userSignup,
+  userLogout,
+  addToken,
+  updateSubscription,
+  updateUserVerification,
+  sendVerifyEmail,
+  addResetPasswordToken,
+  sendResetPasswordEmail,
+  resetUserPassword,
+} = userService;
+
 const registration = async (req, res, next) => {
   const { password, email } = req.body;
-  const user = await service.getUserByEmail(email);
+  const user = await getUserByEmail(email);
   if (user) {
     next(createError(404, "Email in use"));
     return;
   }
   const avatar = gravatar.url(email, { s: "200" });
-  const newUser = await service.userSignup(password, email, avatar);
+  const newUser = await userSignup(password, email, avatar);
   res.status(201).json({
     user: {
       email: newUser.email,
@@ -23,7 +38,7 @@ const registration = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { password, email } = req.body;
-  const user = await service.getUserByEmail(email);
+  const user = await getUserByEmail(email);
   if (!user) {
     next(createError(401, "Email or password is wrong"));
     return;
@@ -41,7 +56,7 @@ const login = async (req, res, next) => {
     id: user.id,
     email: user.email,
   };
-  const updatedUser = await service.addToken(payload);
+  const updatedUser = await addToken(payload);
   res.status(200).json({
     token: updatedUser.token,
     user: {
@@ -53,7 +68,7 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   const { token, email } = req.user;
-  await service.userLogout(email, token);
+  await userLogout(email, token);
   res.status(204).json({});
 };
 
@@ -73,7 +88,7 @@ const updateSub = async (req, res, next) => {
     next(createError(400, "Wrong subscription name"));
     return;
   }
-  const updatedResult = await service.updateSubscription(userId, subscription);
+  const updatedResult = await updateSubscription(userId, subscription);
   if (updatedResult) {
     res.status(200).json({
       data: {
@@ -87,13 +102,13 @@ const updateSub = async (req, res, next) => {
 
 const verification = async (req, res, next) => {
   const { verificationToken } = req.params;
-  const user = await service.getUserByVerificationToken(verificationToken);
+  const user = await getUserByVerificationToken(verificationToken);
   if (!user) {
     next();
     return;
   }
   if (user) {
-    const result = await service.updateUserVerification(user._id);
+    const result = await updateUserVerification(user._id);
     if (result) {
       res.status(200).json({ message: "Verification successful" });
     }
@@ -106,7 +121,7 @@ const resendEmail = async (req, res, next) => {
     next(createError(400, "Missing required field email"));
     return;
   }
-  const user = await service.getUserByEmail(email);
+  const user = await getUserByEmail(email);
   if (!user) {
     next();
     return;
@@ -115,7 +130,7 @@ const resendEmail = async (req, res, next) => {
     next(createError(400, "Verification has already been passed"));
     return;
   }
-  await service.sendVerifyEmail(email, user.verificationToken);
+  await sendVerifyEmail(email, user.verificationToken);
   res.status(200).json({ message: "Verification email sent" });
 };
 
@@ -125,13 +140,13 @@ const updateResetPasswordToken = async (req, res, next) => {
     next(createError(400, "Missing required field email"));
     return;
   }
-  const { resetPasswordToken } = await service.addResetPasswordToken(email);
+  const { resetPasswordToken } = await addResetPasswordToken(email);
   console.log(resetPasswordToken);
   if (!resetPasswordToken) {
     next();
     return;
   }
-  await service.sendResetPasswordEmail(email, resetPasswordToken);
+  await sendResetPasswordEmail(email, resetPasswordToken);
   res.status(200).json({ message: "Reset password email sent" });
 };
 
@@ -142,13 +157,13 @@ const resetPassword = async (req, res, next) => {
     next(createError(400, "Missing required field password"));
     return;
   }
-  const user = await service.getUserByResetPasswordToken(resetPasswordToken);
+  const user = await getUserByResetPasswordToken(resetPasswordToken);
   if (!user) {
     next();
     return;
   }
   if (user) {
-    const result = await service.resetUserPassword(user._id, password);
+    const result = await resetUserPassword(user._id, password);
     if (result) {
       res.status(200).json({ message: "Password has been changed" });
     }

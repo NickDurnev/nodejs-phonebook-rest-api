@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const sgMail = require("@sendgrid/mail");
-const db = require("../db/users");
+const { dbUsers } = require("../db");
 const bcrypt = require("bcryptjs");
 const { customAlphabet } = require("nanoid");
 require("dotenv").config();
@@ -10,39 +10,39 @@ const secret = process.env.SECRET;
 const emailSender = process.env.EMAIL_SENDER;
 const BASE_URL = "https://phonebook-node-jss.herokuapp.com";
 
-const getUserByEmail = async (email) => await db.getByEmail(email);
+const getUserByEmail = async (email) => await dbUsers.getByEmail(email);
 
 const getUserByVerificationToken = async (token) =>
-  await db.getbyVerificationToken(token);
+  await dbUsers.getbyVerificationToken(token);
 
 const getUserByResetPasswordToken = async (token) =>
-  await db.getbyResetPasswordToken(token);
+  await dbUsers.getbyResetPasswordToken(token);
 
 const userSignup = async (password, email, avatar) => {
   const nanoid = customAlphabet("1234567890abcdef", 16);
   const verToken = nanoid();
   sendVerifyEmail(email, verToken);
-  return await db.signup(password, email, avatar, verToken);
+  return await dbUsers.signup(password, email, avatar, verToken);
 };
 
-const userLogout = async (email, token) => await db.logout(email, token);
+const userLogout = async (email, token) => await dbUsers.logout(email, token);
 
 const addToken = async (payload) => {
   const { id } = payload;
   if (!isValid(id)) return false;
   const token = jwt.sign(payload, secret, { expiresIn: "1d" });
-  return await db.token(id, token);
+  return await dbUsers.token(id, token);
 };
 
 const addResetPasswordToken = async (email) => {
   const nanoid = customAlphabet("1234567890abcdef", 24);
   const token = nanoid();
-  return await db.updateResetPasswordToken(email, token);
+  return await dbUsers.updateResetPasswordToken(email, token);
 };
 
 const updateSubscription = async (id, subscription) => {
   if (!isValid(id)) return false;
-  return await db.updateSubs(id, subscription);
+  return await dbUsers.updateSubs(id, subscription);
 };
 
 const sendVerifyEmail = async (email, verToken) => {
@@ -79,11 +79,12 @@ const sendResetPasswordEmail = async (email, token) => {
   }
 };
 
-const updateUserVerification = async (id) => await db.updateVerification(id);
+const updateUserVerification = async (id) =>
+  await dbUsers.updateVerification(id);
 
 const resetUserPassword = async (id, password) => {
   const cryptedPassword = await bcrypt.hash(password, 10);
-  return await db.resetPassword(id, cryptedPassword);
+  return await dbUsers.resetPassword(id, cryptedPassword);
 };
 
 module.exports = {
