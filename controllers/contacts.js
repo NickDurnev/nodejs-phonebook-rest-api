@@ -75,13 +75,9 @@ const create = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-  const { email, name, phone } = req.body;
+  const contact = req.body;
   const { contactId } = req.params;
-  const result = await updateContact(contactId, {
-    email,
-    name,
-    phone,
-  });
+  const result = await updateContact(contactId, contact);
   if (result) {
     res.status(200).json({
       data: {

@@ -3,7 +3,9 @@ const Joi = require("joi");
 module.exports = {
   validationMiddleware: (req, res, next) => {
     const schema = Joi.object({
-      name: Joi.string().max(30).alphanum().required(),
+      name: Joi.string().alphanum().min(3).max(25).trim(true).required(),
+
+      surname: Joi.string().alphanum().min(3).max(25).trim(true).required(),
 
       phone: Joi.string().max(20).required(),
 
