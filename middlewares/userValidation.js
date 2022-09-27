@@ -8,10 +8,7 @@ module.exports = {
         new RegExp("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$")
       ),
 
-      email: Joi.string().email({
-        minDomainSegments: 2,
-        tlds: { allow: ["com", "net"] },
-      }),
+      email: Joi.string().email(),
     });
     const validation = schema.validate(req.body);
     if (validation.error) {
