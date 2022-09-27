@@ -60,7 +60,9 @@ const login = async (req, res, next) => {
   res.status(200).json({
     token: updatedUser.token,
     user: {
+      id: updatedUser._id,
       email: updatedUser.email,
+      name: updatedUser.name,
       subscription: updatedUser.subscription,
     },
   });
