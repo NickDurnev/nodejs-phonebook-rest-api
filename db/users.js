@@ -8,9 +8,10 @@ const getbyVerificationToken = async (token) =>
 const getbyResetPasswordToken = async (token) =>
   await User.findOne({ resetPasswordToken: token });
 
-const signup = async (password, email, avatar, verToken) => {
+const signup = async (password, email, name, avatar, verToken) => {
   const newUser = new User({
     email,
+    name,
     password,
     avatarURL: avatar,
     verificationToken: verToken,

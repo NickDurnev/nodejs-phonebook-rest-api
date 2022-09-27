@@ -18,11 +18,11 @@ const getUserByVerificationToken = async (token) =>
 const getUserByResetPasswordToken = async (token) =>
   await dbUsers.getbyResetPasswordToken(token);
 
-const userSignup = async (password, email, avatar) => {
+const userSignup = async (password, email, name, avatar) => {
   const nanoid = customAlphabet("1234567890abcdef", 16);
   const verToken = nanoid();
   sendVerifyEmail(email, verToken);
-  return await dbUsers.signup(password, email, avatar, verToken);
+  return await dbUsers.signup(password, email, name, avatar, verToken);
 };
 
 const userLogout = async (email, token) => await dbUsers.logout(email, token);

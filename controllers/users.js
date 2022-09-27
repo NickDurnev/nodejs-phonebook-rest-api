@@ -20,14 +20,14 @@ const {
 } = userService;
 
 const registration = async (req, res, next) => {
-  const { password, email } = req.body;
+  const { password, email, name } = req.body;
   const user = await getUserByEmail(email);
   if (user) {
     next(createError(404, "Email in use"));
     return;
   }
   const avatar = gravatar.url(email, { s: "200" });
-  const newUser = await userSignup(password, email, avatar);
+  const newUser = await userSignup(password, email, name, avatar);
   res.status(201).json({
     user: {
       email: newUser.email,

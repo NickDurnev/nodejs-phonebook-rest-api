@@ -8,11 +8,15 @@ module.exports = {
         new RegExp("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$")
       ),
 
+      name: Joi.string().alphanum().min(3).max(25).trim(true),
+
       email: Joi.string().email(),
     });
     const validation = schema.validate(req.body);
     if (validation.error) {
-      return res.status(400).json({ message: "missing required name field" });
+      return res.status(400).json({
+        message: `missing required name field ${validation.error.message}`,
+      });
     }
     next();
   },
