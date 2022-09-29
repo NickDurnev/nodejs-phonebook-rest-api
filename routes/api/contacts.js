@@ -6,7 +6,7 @@ const router = express.Router();
 
 const { validationMiddleware } = contactValidation;
 
-router.get("/", errorHandler(ctrContacts.get));
+router.get("/:userID", errorHandler(ctrContacts.get));
 
 router.get("/:contactId", errorHandler(ctrContacts.getById));
 

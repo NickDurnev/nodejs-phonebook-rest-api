@@ -1,7 +1,7 @@
 const { Contact } = require("../schemas");
 
-const get = async (skip, limit, filter) =>
-  await Contact.find({})
+const get = async (userID, skip, limit, filter) =>
+  await Contact.find({ userID: userID })
     .select({ __v: 0 })
     .skip(skip)
     .limit(limit)
@@ -11,8 +11,8 @@ const getByID = async (id) => await Contact.findById({ _id: id });
 
 const remove = async (id) => await Contact.findByIdAndRemove({ _id: id });
 
-const create = async ({ name, email, phone }) =>
-  await Contact.create({ name, email, phone });
+const create = async ({ userID, name, phone }) =>
+  await Contact.create({ userID, name, phone });
 
 const update = async (id, fields) =>
   await Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });

@@ -12,9 +12,11 @@ const {
 
 const get = async (req, res, next) => {
   const { page = 1, limit = 20, favorite = null } = req.query;
+  const { userID } = req.params;
   let skip = 0;
   page > 1 ? (skip = (page - 1) * limit) : (skip = 0);
   const results = await getAllContacts(
+    userID,
     parseInt(skip),
     parseInt(limit),
     favorite
@@ -64,8 +66,8 @@ const remove = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const result = await createContact({ name, email, phone });
+  const { userID, name, phone } = req.body;
+  const result = await createContact({ userID, name, phone });
   res.status(201).json({
     status: "success",
     data: {

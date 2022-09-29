@@ -69,7 +69,7 @@ const sendResetPasswordEmail = async (email, token) => {
     from: `${emailSender}`, // Change to your verified sender
     subject: "Phonebook reset password",
     text: "Link for reset password",
-    html: `<h2>Plaease, verify your email by following this link</h2><a href=${BASE_URL}/users/res_password/${token}>Click me</a>`,
+    html: `<h2>You can reset your password by following this link</h2><a href=${BASE_URL}/users/res_password/${token}>Click me</a>`,
   };
   try {
     await sgMail.send(msg);
