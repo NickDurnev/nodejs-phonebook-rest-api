@@ -9,6 +9,7 @@ const isValid = require("mongoose").Types.ObjectId.isValid;
 const secret = process.env.SECRET;
 const emailSender = process.env.EMAIL_SENDER;
 const BASE_URL = "https://phonebook-node-jss.herokuapp.com";
+const APP_URL = "http://localhost:3000";
 
 const getUserByEmail = async (email) => await dbUsers.getByEmail(email);
 
@@ -69,7 +70,7 @@ const sendResetPasswordEmail = async (email, token) => {
     from: `${emailSender}`, // Change to your verified sender
     subject: "Phonebook reset password",
     text: "Link for reset password",
-    html: `<h2>You can reset your password by following this link</h2><a href=${BASE_URL}/users/res_password/${token}>Click me</a>`,
+    html: `<h2>You can reset your password by following this link</h2><a href=${APP_URL}/password/${token}>Click me</a>`,
   };
   try {
     await sgMail.send(msg);
