@@ -29,7 +29,6 @@ const users = new Schema({
     type: String,
     required: [true, "Verify token is required"],
   },
-  avatarURL: String,
   resetPasswordToken: {
     type: String,
     default: null,

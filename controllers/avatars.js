@@ -1,11 +1,11 @@
 const { avatarService } = require("../service");
-const { setUserAvatar, setAvatarURL } = avatarService;
+const { setContactAvatar, setAvatarURL } = avatarService;
 
 const setAvatar = async (req, res, next) => {
-  const { email } = req.user;
+  const { contactID } = req.params;
   const { filename } = req.file;
-  const userAvatar = await setUserAvatar(email, filename);
-  const { avatarURL } = await setAvatarURL(email, userAvatar);
+  const userAvatar = await setContactAvatar(contactID, filename);
+  const { avatarURL } = await setAvatarURL(contactID, userAvatar);
   if (avatarURL) {
     res.status(200).json({
       avatarURL: avatarURL,

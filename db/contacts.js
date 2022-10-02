@@ -24,6 +24,17 @@ const updateStatus = async (id, favorite) =>
     { new: true }
   );
 
+const updateAvatar = async (contactID, avatarURL) =>
+  await Contact.findOneAndUpdate(
+    { _id: contactID },
+    {
+      $set: {
+        avatarURL,
+      },
+    },
+    { new: true }
+  ).select({ avatarURL: 1 });
+
 module.exports = {
   get,
   getByID,
@@ -31,4 +42,5 @@ module.exports = {
   create,
   update,
   updateStatus,
+  updateAvatar,
 };

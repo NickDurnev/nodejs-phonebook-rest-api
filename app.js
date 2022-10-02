@@ -5,9 +5,10 @@ const createError = require("http-errors");
 const catchAsyncErrors = require("./middlewares/errorHandler");
 const { authMiddleware } = require("./middlewares/tokenValidation");
 
-const { contactsRouter } = require("./routes/api");
-const { authRouter } = require("./routes/api");
-const { usersRouter } = require("./routes/api");
+const { contactsApiRouter } = require("./routes/api");
+const { authApiRouter } = require("./routes/api");
+const { usersRouter } = require("./routes");
+const { contactsRouter } = require("./routes");
 
 const app = express();
 
@@ -18,9 +19,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-app.use("/api/contacts", contactsRouter);
-app.use("/api/users", authRouter);
+app.use("/api/contacts", contactsApiRouter);
+app.use("/api/users", authApiRouter);
 app.use("/users", authMiddleware, usersRouter);
+app.use("/contacts", authMiddleware, contactsRouter);
 
 app.use(
   catchAsyncErrors((req, res, next) => {

@@ -37,17 +37,6 @@ const updateSubs = async (id, subscription) =>
     { new: true }
   ).select({ email: 1, subscription: 1 });
 
-const updateAvatar = async (email, avatarURL) =>
-  await User.findOneAndUpdate(
-    { email: email },
-    {
-      $set: {
-        avatarURL: avatarURL,
-      },
-    },
-    { new: true }
-  ).select({ avatarURL: 1 });
-
 const updateVerification = async (id) =>
   await User.findByIdAndUpdate(
     { _id: id },
@@ -77,7 +66,6 @@ module.exports = {
   logout,
   token,
   updateSubs,
-  updateAvatar,
   updateVerification,
   updateResetPasswordToken,
   resetPassword,
