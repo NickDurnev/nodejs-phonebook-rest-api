@@ -15,7 +15,7 @@ router.post("/", validationMiddleware, errorHandler(ctrContacts.create));
 
 router.delete("/:contactId", errorHandler(ctrContacts.remove));
 
-router.put(
+router.patch(
   "/:contactId",
   validationMiddleware,
   errorHandler(ctrContacts.update)

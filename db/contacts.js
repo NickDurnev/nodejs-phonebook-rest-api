@@ -14,8 +14,14 @@ const remove = async (id) => await Contact.findByIdAndRemove({ _id: id });
 const create = async ({ userID, name, phone }) =>
   await Contact.create({ userID, name, phone });
 
-const update = async (id, fields) =>
-  await Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });
+const update = async (id, fields) => {
+  const { name, phone, email, surname } = fields;
+  return await Contact.findByIdAndUpdate(
+    { _id: id },
+    { $set: { name: name, phone: phone, email: email, surname: surname } },
+    { new: true }
+  );
+};
 
 const updateStatus = async (id, favorite) =>
   await Contact.findByIdAndUpdate(

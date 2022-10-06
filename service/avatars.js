@@ -1,14 +1,15 @@
 const fs = require("fs");
+const { customAlphabet } = require("nanoid");
 const path = require("path");
 const jimp = require("jimp");
-const { uploadImage, getAvatarUrl } = require("../google-storage");
+const { uploadImage, deleteImage, getAvatarUrl } = require("../google-storage");
 const { dbContacts } = require("../db");
 
+const nanoid = customAlphabet("1234567890abcdef", 16);
 const tmpDirPath = path.join(__dirname, "..", "tmp");
 
-const setContactAvatar = async (contactID, filename) => {
-  const contact = contactID.slice(0, 10);
-  const newFileName = `${contact}_avatar.png`;
+const setContactAvatar = async (contactID, filename, prevURL) => {
+  const newFileName = `${nanoid()}_avatar.png`;
   jimp
     .read(`${tmpDirPath}/${filename}`)
     .then((avatar) => {
@@ -21,6 +22,7 @@ const setContactAvatar = async (contactID, filename) => {
         else console.log(`${filename} was deleted`);
       })
     )
+    .then(() => deleteImage(prevURL))
     .catch((err) => {
       console.error(err);
     });
