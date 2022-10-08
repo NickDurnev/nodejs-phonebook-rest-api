@@ -1,11 +1,11 @@
 const { Contact } = require("../schemas");
 
 const get = async (userID, skip, limit, filter) =>
-  await Contact.find({ userID: userID })
+  await Contact.find({ userID: userID, ...filter })
     .select({ __v: 0 })
     .skip(skip)
     .limit(limit)
-    .sort(filter);
+    .sort({ name: 1 });
 
 const getByID = async (id) => await Contact.findById({ _id: id });
 

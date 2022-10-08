@@ -11,7 +11,8 @@ const {
 } = contactService;
 
 const get = async (req, res, next) => {
-  const { page = 1, limit = 20, favorite = null } = req.query;
+  const { page, limit = 10, favorite } = req.query;
+  console.log(req.query);
   const { userID } = req.params;
   let skip = 0;
   page > 1 ? (skip = (page - 1) * limit) : (skip = 0);
@@ -28,6 +29,9 @@ const get = async (req, res, next) => {
       data: "Contacts ended",
     });
     return;
+  }
+  if (!results) {
+    next();
   }
   res.json({
     status: "success",

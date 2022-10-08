@@ -13,7 +13,7 @@ module.exports = {
 
       email: Joi.string().email().allow(null, ""),
 
-      favorite: Joi.bool(),
+      favorite: Joi.bool().allow(null),
     });
     const validation = schema.validate(req.body);
     if (validation.error) {

@@ -4,7 +4,7 @@ const isValid = require("mongoose").Types.ObjectId.isValid;
 const getAllContacts = async (userID, skip, limit, favorite) => {
   let filter = null;
   if (favorite) {
-    filter = { favorite: -1 };
+    filter = { favorite: true };
   }
   return await dbContacts.get(userID, skip, limit, filter);
 };

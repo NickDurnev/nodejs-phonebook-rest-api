@@ -9,7 +9,7 @@ const { validationMiddleware } = contactValidation;
 
 router.get("/:userID", tokenVerification, errorHandler(ctrContacts.get));
 
-router.get("/:contactId", errorHandler(ctrContacts.getById));
+router.get("/:userID/:contactId", errorHandler(ctrContacts.getById));
 
 router.post("/", validationMiddleware, errorHandler(ctrContacts.create));
 
