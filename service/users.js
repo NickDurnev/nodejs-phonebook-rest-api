@@ -8,8 +8,8 @@ const isValid = require("mongoose").Types.ObjectId.isValid;
 
 const secret = process.env.SECRET;
 const emailSender = process.env.EMAIL_SENDER;
-const BASE_URL = "https://phonebook-node-jss.herokuapp.com";
-const APP_URL = "http://localhost:3000";
+const BASE_BACK_END_URL = process.env.BASE_BACK_END_URL;
+const BASE_FRONT_END_URL = process.env.BASE_FRONT_END_URL;
 
 const getUserByEmail = async (email) => await dbUsers.getByEmail(email);
 
@@ -53,7 +53,7 @@ const sendVerifyEmail = async (email, verToken) => {
     from: `${emailSender}`, // Change to your verified sender
     subject: "Phonebook email verification",
     text: "Link for email verification",
-    html: `<h2>Plaease, verify your email by following this link</h2><a href=${BASE_URL}/users/verify/${verToken}>Click me</a>`,
+    html: `<h2>Plaease, verify your email by following this link</h2><a href=${BASE_BACK_END_URL}users/verify/${verToken}>Click me</a>`,
   };
   try {
     await sgMail.send(msg);
@@ -70,7 +70,7 @@ const sendResetPasswordEmail = async (email, token) => {
     from: `${emailSender}`, // Change to your verified sender
     subject: "Phonebook reset password",
     text: "Link for reset password",
-    html: `<h2>You can reset your password by following this link</h2><a href=${APP_URL}/password/${token}>Click me</a>`,
+    html: `<h2>You can reset your password by following this link</h2><a href=${BASE_FRONT_END_URL}password/${token}>Click me</a>`,
   };
   try {
     await sgMail.send(msg);
