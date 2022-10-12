@@ -9,6 +9,16 @@ const get = async (userID, skip, limit, filter) =>
 
 const getByID = async (id) => await Contact.findById({ _id: id });
 
+const getByName = async (userID, name, skip, limit) =>
+  await Contact.find({
+    userID: userID,
+    name: new RegExp(name, "i"),
+  })
+    .select({ __v: 0 })
+    .skip(skip)
+    .limit(limit)
+    .sort({ name: 1 });
+
 const remove = async (id) => await Contact.findByIdAndRemove({ _id: id });
 
 const create = async ({ userID, name, phone }) =>
@@ -44,6 +54,7 @@ const updateAvatar = async (contactID, avatarURL) =>
 module.exports = {
   get,
   getByID,
+  getByName,
   remove,
   create,
   update,

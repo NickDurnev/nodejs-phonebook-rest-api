@@ -11,6 +11,8 @@ router.get("/:userID", tokenVerification, errorHandler(ctrContacts.get));
 
 router.get("/:userID/:contactId", errorHandler(ctrContacts.getById));
 
+router.get("/:userID/search/:contactName", errorHandler(ctrContacts.getByName));
+
 router.post("/", validationMiddleware, errorHandler(ctrContacts.create));
 
 router.delete("/:contactId", errorHandler(ctrContacts.remove));

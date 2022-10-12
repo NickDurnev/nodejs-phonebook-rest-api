@@ -14,6 +14,9 @@ const getContactByID = async (id) => {
   return await dbContacts.getByID(id);
 };
 
+const getContactsByName = async (userID, name, skip, limit) =>
+  await dbContacts.getByName(userID, name, skip, limit);
+
 const removeContact = async (id) => {
   if (!isValid(id)) return false;
   return await dbContacts.remove(id);
@@ -36,6 +39,7 @@ const updateStatusContact = async (id, body) => {
 module.exports = {
   getAllContacts,
   getContactByID,
+  getContactsByName,
   removeContact,
   createContact,
   updateContact,

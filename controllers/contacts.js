@@ -4,6 +4,7 @@ const { contactService } = require("../service");
 const {
   getAllContacts,
   getContactByID,
+  getContactsByName,
   removeContact,
   createContact,
   updateContact,
@@ -12,7 +13,6 @@ const {
 
 const get = async (req, res, next) => {
   const { page, limit = 10, favorite } = req.query;
-  console.log(req.query);
   const { userID } = req.params;
   let skip = 0;
   page > 1 ? (skip = (page - 1) * limit) : (skip = 0);
@@ -53,6 +53,40 @@ const getById = async (req, res, next) => {
       data: {
         contact: result,
       },
+    });
+  } else {
+    next();
+  }
+};
+
+const getByName = async (req, res, next) => {
+  const { page, limit = 10 } = req.query;
+  const { userID, contactName } = req.params;
+  let skip = 0;
+  page > 1 ? (skip = (page - 1) * limit) : (skip = 0);
+  const results = await getContactsByName(
+    userID,
+    contactName,
+    parseInt(skip),
+    parseInt(limit)
+  );
+  // if (results.length === 0) {
+  //   res.json({
+  //     status: "success",
+  //     code: 200,
+  //     data: "Contacts ended",
+  //   });
+  //   return;
+  // }
+  if (results) {
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        contacts: results,
+      },
+      page,
+      limit,
     });
   } else {
     next();
@@ -117,6 +151,7 @@ const updateStatus = async (req, res, next) => {
 module.exports = {
   get,
   getById,
+  getByName,
   remove,
   create,
   update,
