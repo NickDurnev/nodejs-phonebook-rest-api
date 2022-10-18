@@ -50,7 +50,7 @@ const updateResetPasswordToken = async (email, token) =>
       $set: { resetPasswordToken: token },
     },
     { new: true }
-  ).select({ resetPasswordToken: 1 });
+  ).select({ resetPasswordToken: 1, name: 1 });
 
 const resetPassword = async (id, password) =>
   await User.findByIdAndUpdate(

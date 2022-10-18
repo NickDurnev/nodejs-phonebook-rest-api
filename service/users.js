@@ -8,7 +8,7 @@ const isValid = require("mongoose").Types.ObjectId.isValid;
 
 const secret = process.env.SECRET;
 const emailSender = process.env.EMAIL_SENDER;
-const BASE_BACK_END_URL = process.env.BASE_BACK_END_URL;
+// const BASE_BACK_END_URL = process.env.BASE_BACK_END_URL;
 const BASE_FRONT_END_URL = process.env.BASE_FRONT_END_URL;
 
 const getUserByEmail = async (email) => await dbUsers.getByEmail(email);
@@ -51,9 +51,12 @@ const sendVerifyEmail = async (email, verToken) => {
   const msg = {
     to: `${email}`, // Change to your recipient
     from: `${emailSender}`, // Change to your verified sender
-    subject: "Phonebook email verification",
-    text: "Link for email verification",
-    html: `<h2>Plaease, verify your email by following this link</h2><a href=${BASE_BACK_END_URL}users/verify/${verToken}>Click me</a>`,
+    templateId: "d-9ce58db3f70f4dd5832e7dd6d75f28c6",
+    dynamic_template_data: {
+      subject: "Phonebook email verification",
+      text: `Verify your email to join our family 🤗`,
+      link: `${BASE_FRONT_END_URL}login/${verToken}`,
+    },
   };
   try {
     await sgMail.send(msg);
@@ -63,14 +66,17 @@ const sendVerifyEmail = async (email, verToken) => {
   }
 };
 
-const sendResetPasswordEmail = async (email, token) => {
+const sendResetPasswordEmail = async (email, token, name) => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const msg = {
     to: `${email}`, // Change to your recipient
     from: `${emailSender}`, // Change to your verified sender
-    subject: "Phonebook reset password",
-    text: "Link for reset password",
-    html: `<h2>You can reset your password by following this link</h2><a href=${BASE_FRONT_END_URL}password/${token}>Click me</a>`,
+    templateId: "d-9ce58db3f70f4dd5832e7dd6d75f28c6",
+    dynamic_template_data: {
+      subject: "Phonebook reset password",
+      text: `Hi, ${name}. You can change your password 😉`,
+      link: `${BASE_FRONT_END_URL}password/${token}`,
+    },
   };
   try {
     await sgMail.send(msg);

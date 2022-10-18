@@ -70,15 +70,7 @@ const getByName = async (req, res, next) => {
     parseInt(skip),
     parseInt(limit)
   );
-  // if (results.length === 0) {
-  //   res.json({
-  //     status: "success",
-  //     code: 200,
-  //     data: "Contacts ended",
-  //   });
-  //   return;
-  // }
-  if (results) {
+  if (results && results.length > 0) {
     res.json({
       status: "success",
       code: 200,

@@ -142,13 +142,12 @@ const updateResetPasswordToken = async (req, res, next) => {
     next(createError(400, "Missing required field email"));
     return;
   }
-  const { resetPasswordToken } = await addResetPasswordToken(email);
-  console.log(resetPasswordToken);
+  const { resetPasswordToken, name } = await addResetPasswordToken(email);
   if (!resetPasswordToken) {
     next();
     return;
   }
-  await sendResetPasswordEmail(email, resetPasswordToken);
+  await sendResetPasswordEmail(email, resetPasswordToken, name);
   res.status(200).json({ message: "Reset password email sent" });
 };
 
