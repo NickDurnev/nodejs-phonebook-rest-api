@@ -1,6 +1,5 @@
 const path = require("path");
 const { Storage } = require("@google-cloud/storage");
-// const { contactService } = require("./service");
 
 const storage = new Storage();
 const bucketName = "phonebook-avatars";
