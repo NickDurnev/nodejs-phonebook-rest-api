@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const { contactService } = require("../service");
+const { deleteImage } = require("../google-storage");
 
 const {
   getAllContacts,
@@ -26,7 +27,8 @@ const get = async (req, res, next) => {
     res.json({
       status: "success",
       code: 200,
-      data: "Contacts ended",
+      data: { contacts: [] },
+      message: "Contacts ended",
     });
     return;
   }
@@ -87,8 +89,9 @@ const getByName = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await removeContact(contactId);
-  if (result) {
+  const removedContact = await removeContact(contactId);
+  await deleteImage(removedContact.avatarURL);
+  if (removedContact) {
     res.status(200).json({ message: "contact deleted" });
   } else {
     next();

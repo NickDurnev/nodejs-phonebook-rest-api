@@ -17,12 +17,12 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 1 * 1000 * 1000 } });
 
 router.patch(
   "/avatars/:contactID",
   upload.single("avatar"),
-  errorHandler(ctrAvatars)
+  errorHandler(ctrAvatars.setAvatar)
 );
 
 module.exports = router;

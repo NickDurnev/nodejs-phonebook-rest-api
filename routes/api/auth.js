@@ -20,6 +20,4 @@ router.get("/logout", authMiddleware, errorHandler(ctrUsers.logout));
 
 router.get("/current", authMiddleware, errorHandler(ctrUsers.currentUser));
 
-router.patch("/:userId", errorHandler(ctrUsers.updateSub));
-
 module.exports = router;

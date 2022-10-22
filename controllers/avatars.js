@@ -5,7 +5,7 @@ const setAvatar = async (req, res, next) => {
   const { contactID } = req.params;
   const { filename } = req.file;
   const prevURL = req.body.prevURL;
-  const userAvatar = await setContactAvatar(contactID, filename, prevURL);
+  const userAvatar = await setContactAvatar(filename, prevURL);
   const { avatarURL } = await setAvatarURL(contactID, userAvatar);
   if (avatarURL) {
     res.status(200).json({
@@ -16,4 +16,4 @@ const setAvatar = async (req, res, next) => {
   }
 };
 
-module.exports = setAvatar;
+module.exports = { setAvatar };

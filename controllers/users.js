@@ -32,6 +32,7 @@ const registration = async (req, res, next) => {
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
+      verify: newUser.verify,
     },
   });
 };

@@ -26,4 +26,6 @@ router.post(
   errorHandler(ctrUsers.updateResetPasswordToken)
 );
 
+router.patch("/:userId", errorHandler(ctrUsers.updateSub));
+
 module.exports = router;
