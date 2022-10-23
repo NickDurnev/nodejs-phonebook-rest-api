@@ -7,8 +7,6 @@ const tmpDirPath = path.join(__dirname, ".", "tmp");
 const baseURL = "https://storage.googleapis.com";
 
 async function uploadImage(fileName, cloudFileName) {
-  console.log(fileName);
-  console.log(cloudFileName);
   const filePath = `${tmpDirPath}/${fileName}`;
   const options = {
     destination: cloudFileName,

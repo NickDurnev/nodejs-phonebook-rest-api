@@ -64,6 +64,7 @@ const login = async (req, res, next) => {
       id: updatedUser._id,
       email: updatedUser.email,
       name: updatedUser.name,
+      verify: updatedUser.verify,
       subscription: updatedUser.subscription,
     },
   });

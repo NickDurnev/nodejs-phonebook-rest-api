@@ -7,11 +7,11 @@ const router = express.Router();
 
 const { validationMiddleware } = contactValidation;
 
-router.get("/:userID", tokenVerification, errorHandler(ctrContacts.get));
-
 router.get("/:userID/:contactId", errorHandler(ctrContacts.getById));
 
 router.get("/:userID/search/:contactName", errorHandler(ctrContacts.getByName));
+
+router.get("/:userID", tokenVerification, errorHandler(ctrContacts.get));
 
 router.post("/", validationMiddleware, errorHandler(ctrContacts.create));
 

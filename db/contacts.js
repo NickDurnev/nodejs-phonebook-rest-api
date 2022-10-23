@@ -9,8 +9,8 @@ const get = async (userID, skip, limit, filter) =>
 
 const getByID = async (id) => await Contact.findById({ _id: id });
 
-const getByName = async (userID, name, skip, limit) =>
-  await Contact.find({
+const getByName = async (userID, name, skip, limit) => {
+  return await Contact.find({
     userID: userID,
     name: new RegExp(name, "i"),
   })
@@ -18,6 +18,7 @@ const getByName = async (userID, name, skip, limit) =>
     .skip(skip)
     .limit(limit)
     .sort({ name: 1 });
+};
 
 const remove = async (id) => await Contact.findByIdAndRemove({ _id: id });
 
