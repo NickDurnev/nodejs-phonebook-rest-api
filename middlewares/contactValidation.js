@@ -5,7 +5,7 @@ module.exports = {
     const schema = Joi.object({
       avatarIRL: Joi.string(),
       userID: Joi.string(),
-      name: Joi.string().alphanum().min(3).max(20).trim(true).required(),
+      name: Joi.string().min(3).max(20).trim(true).required(),
 
       surname: Joi.string().alphanum().max(20).trim(true).allow(null, ""),
 
