@@ -1,11 +1,11 @@
 const express = require("express");
 const { ctrContacts } = require("../../controllers");
-const { contactValidation } = require("../../middlewares");
-const { errorHandler } = require("../../middlewares");
-const { tokenVerification } = require("../../middlewares/tokenVerification");
+const {
+  contactValidation,
+  errorHandler,
+  tokenVerification,
+} = require("../../middlewares");
 const router = express.Router();
-
-const { validationMiddleware } = contactValidation;
 
 router.get("/:userID/:contactId", errorHandler(ctrContacts.getById));
 
@@ -13,13 +13,13 @@ router.get("/:userID/search/:contactName", errorHandler(ctrContacts.getByName));
 
 router.get("/:userID", tokenVerification, errorHandler(ctrContacts.get));
 
-router.post("/", validationMiddleware, errorHandler(ctrContacts.create));
+router.post("/", contactValidation, errorHandler(ctrContacts.create));
 
 router.delete("/:contactId", errorHandler(ctrContacts.remove));
 
 router.patch(
   "/:contactId",
-  validationMiddleware,
+  contactValidation,
   errorHandler(ctrContacts.update)
 );
 

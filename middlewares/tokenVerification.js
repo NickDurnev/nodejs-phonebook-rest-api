@@ -19,4 +19,4 @@ const tokenVerification = async (req, res, next) => {
   }
 };
 
-module.exports = { tokenVerification };
+module.exports = tokenVerification;

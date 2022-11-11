@@ -2,8 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const createError = require("http-errors");
-const catchAsyncErrors = require("./middlewares/errorHandler");
-const { authMiddleware } = require("./middlewares/tokenValidation");
+const { errorHandler, tokenValidation } = require("./middlewares");
 
 const { contactsApiRouter } = require("./routes/api");
 const { authApiRouter } = require("./routes/api");
@@ -21,11 +20,11 @@ app.use(express.static("public"));
 
 app.use("/api/contacts", contactsApiRouter);
 app.use("/api/users", authApiRouter);
-app.use("/users", authMiddleware, usersRouter);
-app.use("/contacts", authMiddleware, contactsRouter);
+app.use("/users", tokenValidation, usersRouter);
+app.use("/contacts", tokenValidation, contactsRouter);
 
 app.use(
-  catchAsyncErrors((req, res, next) => {
+  errorHandler((req, res, next) => {
     next(createError(404));
   })
 );

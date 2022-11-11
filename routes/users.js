@@ -1,28 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const { ctrUsers } = require("../controllers/");
-const { userValidation } = require("../middlewares");
-const { errorHandler } = require("../middlewares");
-
-const { validationMiddleware } = userValidation;
+const { userValidation, errorHandler } = require("../middlewares");
 
 router.get("/verify/:verificationToken", errorHandler(ctrUsers.verification));
 
-router.post(
-  "/verify/",
-  validationMiddleware,
-  errorHandler(ctrUsers.resendEmail)
-);
+router.post("/verify/", userValidation, errorHandler(ctrUsers.resendEmail));
 
 router.post(
   "/res_password/:resetPasswordToken",
-  validationMiddleware,
+  userValidation,
   errorHandler(ctrUsers.resetPassword)
 );
 
 router.post(
   "/res_password/",
-  validationMiddleware,
+  userValidation,
   errorHandler(ctrUsers.updateResetPasswordToken)
 );
 
