@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-app.use("/api/contacts", contactsApiRouter);
+app.use("/api/contacts", tokenValidation, contactsApiRouter);
 app.use("/api/users", authApiRouter);
 app.use("/users", tokenValidation, usersRouter);
 app.use("/contacts", tokenValidation, contactsRouter);

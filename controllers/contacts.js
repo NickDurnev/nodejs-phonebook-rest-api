@@ -14,11 +14,11 @@ const {
 
 const get = async (req, res, next) => {
   const { page, limit = 10, favorite } = req.query;
-  const { userID } = req.params;
+  const user = req.user;
   let skip = 0;
   page > 1 ? (skip = (page - 1) * limit) : (skip = 0);
   const results = await getAllContacts(
-    userID,
+    user._id,
     parseInt(skip),
     parseInt(limit),
     favorite
@@ -63,11 +63,12 @@ const getById = async (req, res, next) => {
 
 const getByName = async (req, res, next) => {
   const { page, limit = 10 } = req.query;
-  const { userID, contactName } = req.params;
+  const { contactName } = req.params;
+  const user = req.user;
   let skip = 0;
   page > 1 ? (skip = (page - 1) * limit) : (skip = 0);
   const results = await getContactsByName(
-    userID,
+    user._id,
     contactName,
     parseInt(skip),
     parseInt(limit)

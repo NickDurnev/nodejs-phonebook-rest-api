@@ -7,9 +7,6 @@ const {
 } = require("../../middlewares");
 const router = express.Router();
 
-// const { authMiddleware } = tokenValidation;
-// const { validationMiddleware } = userValidation;
-
 router.post("/signup", userValidation, errorHandler(ctrUsers.registration));
 
 router.post("/login", userValidation, errorHandler(ctrUsers.login));
