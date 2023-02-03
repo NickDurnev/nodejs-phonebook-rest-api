@@ -1,16 +1,19 @@
 const { Contact } = require("../schemas");
 
-const get = async (userID, skip, limit, filter) =>
-  await Contact.find({ userID: userID, ...filter })
+const get = async (userID, skip, limit, filter) => {
+  const contacts = await Contact.find({ userID: userID, ...filter })
     .select({ __v: 0 })
     .skip(skip)
     .limit(limit)
     .sort({ name: 1 });
+  const total = await Contact.count({ userID: userID, ...filter });
+  return { contacts, total };
+};
 
 const getByID = async (id) => await Contact.findById({ _id: id });
 
 const getByName = async (userID, name, skip, limit) => {
-  return await Contact.find({
+  const contacts = await Contact.find({
     userID: userID,
     name: new RegExp(name, "i"),
   })
@@ -18,6 +21,13 @@ const getByName = async (userID, name, skip, limit) => {
     .skip(skip)
     .limit(limit)
     .sort({ name: 1 });
+  const total = await Contact.count({
+    userID: userID,
+    name: new RegExp(name, "i"),
+  });
+  console.log(contacts);
+  console.log(total);
+  return { contacts, total };
 };
 
 const remove = async (id) => await Contact.findByIdAndRemove({ _id: id });

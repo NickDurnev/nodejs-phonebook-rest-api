@@ -17,13 +17,13 @@ const get = async (req, res, next) => {
   const user = req.user;
   let skip = 0;
   page > 1 ? (skip = (page - 1) * limit) : (skip = 0);
-  const results = await getAllContacts(
+  const { contacts, total } = await getAllContacts(
     user._id,
     parseInt(skip),
     parseInt(limit),
     favorite
   );
-  if (results.length === 0) {
+  if (contacts.length === 0) {
     res.json({
       status: "success",
       code: 200,
@@ -32,14 +32,15 @@ const get = async (req, res, next) => {
     });
     return;
   }
-  if (!results) {
+  if (!contacts) {
     next();
   }
   res.json({
     status: "success",
     code: 200,
     data: {
-      contacts: results,
+      contacts: contacts,
+      total: total,
     },
     page,
     limit,
@@ -67,18 +68,20 @@ const getByName = async (req, res, next) => {
   const user = req.user;
   let skip = 0;
   page > 1 ? (skip = (page - 1) * limit) : (skip = 0);
-  const results = await getContactsByName(
+  console.log(1);
+  const { contacts, total } = await getContactsByName(
     user._id,
     contactName,
     parseInt(skip),
     parseInt(limit)
   );
-  if (results && results.length > 0) {
+  if (contacts && contacts.length > 0) {
     res.json({
       status: "success",
       code: 200,
       data: {
-        contacts: results,
+        contacts: contacts,
+        total: total,
       },
       page,
       limit,

@@ -31,9 +31,7 @@ app.use(
 
 app.use((error, req, res, next) => {
   res.status(error.status || 500);
-  res.json({
-    message: error.message,
-  });
+  res.json(error.message);
 });
 
 module.exports = app;
