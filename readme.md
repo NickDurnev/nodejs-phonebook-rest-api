@@ -1,6 +1,6 @@
 # Phonebook REST API
 
-This repository contains the source code for the REST API of the movie app Phonebook. It is built with Node.js, Express, Mongoose and other dependencies listed in `package.json`.
+This repository contains the source code for the REST API of the app Phonebook. It is built with Node.js, Express, Mongoose and other dependencies listed in `package.json`.
 The API is used to access and manipulate data related to contacts and users in the Phonebook app. It consists of several endpoints that allow you to perform CRUD operations on contacts, authenticate users, comfirm email and change password service, using email sending.
 
 ## Technologies Used
