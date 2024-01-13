@@ -3,6 +3,10 @@ const createError = require("http-errors");
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const { unauthorizedError } = require("../helpers/errors");
+const {
+  sendVerifyEmail,
+  sendResetPasswordEmail,
+} = require("../helpers/sendEmail");
 
 const {
   getUserByEmail,
@@ -13,9 +17,7 @@ const {
   addToken,
   updateSubscription,
   updateUserVerification,
-  sendVerifyEmail,
   addResetPasswordToken,
-  sendResetPasswordEmail,
   resetUserPassword,
 } = userService;
 
@@ -134,7 +136,7 @@ const resendEmail = async (req, res, next) => {
     next(createError(400, "Verification has already been passed"));
     return;
   }
-  await sendVerifyEmail(email, user.verificationToken);
+  await sendVerifyEmail(email, user.verificationToken, user.name);
   res.status(200).json({ message: "Verification email sent" });
 };
 
