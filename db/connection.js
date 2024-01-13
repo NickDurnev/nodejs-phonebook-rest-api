@@ -4,10 +4,18 @@ require("dotenv").config();
 const contactsDB = process.env.DB_HOST;
 
 const connection = async () => {
-  return mongoose.connect(contactsDB, {
-    promiseLibrary: global.Promise,
-    useUnifiedTopology: true,
-  });
+  try {
+    mongoose.set("strictQuery", false);
+    await mongoose.connect(contactsDB, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("MongoDB Connected...");
+  } catch (err) {
+    console.error(err.message);
+    // make the process fail
+    process.exit(1);
+  }
 };
 
 module.exports = connection;
