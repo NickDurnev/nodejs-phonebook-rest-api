@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const { customAlphabet } = require("nanoid");
 require("dotenv").config();
 const isValid = require("mongoose").Types.ObjectId.isValid;
+const { sendVerifyEmail } = require("../helpers/sendEmail");
 
 const secret = process.env.SECRET;
 
@@ -41,46 +42,6 @@ const updateSubscription = async (id, subscription) => {
   if (!isValid(id)) return false;
   return await dbUsers.updateSubs(id, subscription);
 };
-
-// const sendVerifyEmail = async (email, verToken) => {
-//   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-//   const msg = {
-//     to: `${email}`, // Change to your recipient
-//     from: `${emailSender}`, // Change to your verified sender
-//     templateId: "d-9ce58db3f70f4dd5832e7dd6d75f28c6",
-//     dynamic_template_data: {
-//       subject: "Phonebook email verification",
-//       text: `Verify your email to join our family 🤗`,
-//       link: `${BASE_FRONT_END_URL}login/${verToken}`,
-//     },
-//   };
-//   try {
-//     await sgMail.send(msg);
-//     console.log("Email sent");
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-
-// const sendResetPasswordEmail = async (email, token, name) => {
-//   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-//   const msg = {
-//     to: `${email}`, // Change to your recipient
-//     from: `${emailSender}`, // Change to your verified sender
-//     templateId: "d-9ce58db3f70f4dd5832e7dd6d75f28c6",
-//     dynamic_template_data: {
-//       subject: "Phonebook reset password",
-//       text: `Hi, ${name}. You can change your password 😉`,
-//       link: `${BASE_FRONT_END_URL}password/${token}`,
-//     },
-//   };
-//   try {
-//     await sgMail.send(msg);
-//     console.log("Email sent");
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
 
 const updateUserVerification = async (id) =>
   await dbUsers.updateVerification(id);

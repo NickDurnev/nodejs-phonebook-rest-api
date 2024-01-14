@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const createEmail = require("./createEmail");
+const { createEmail } = require("./createEmail");
 
 const EMAIL_SENDER = process.env.EMAIL_SENDER;
 const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD;
@@ -21,7 +21,7 @@ async function sendVerifyEmail(email, token, name) {
     text: "To finish signing up, please confirm your email address. This ensures we have the right email in case we need to contact you.",
   };
 
-  const html = createEmail(templateData, "./templates/verifyEmail.hbs");
+  const html = createEmail(templateData);
 
   const mailOptions = {
     from: EMAIL_SENDER,
